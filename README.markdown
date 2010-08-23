@@ -1,19 +1,24 @@
-# 1. Contents
+Carpooling
+==========
 
-1. Contents
-2. Notes
+## 1. Contenido
+
+1. Contenido
+2. Ficheros
 3. Dependencies
 4. Compiling
 5. Running
 6. License
 
-# 2. Notes
+## 2. Ficheros
 
-The sounds are not included on github. Get them from the sourceforge mirrors.
-Actually, get the whole package from sourceforge unless you want an unstable
-release.
+- ejemplo.php: fichero de ejemplo para empezar a probar cosas.
+- includes: carpeta con ficheros a incluir.
+   - general.inc.php: contiene funciones de carácter general.
+   - header.php: contiene el código fuente de la cabecera. No se debe incluir directamente (usar la función get_header).
+   - footer.php: contiene el código fuente del pie de página. No se debe incluir directamente (usar la función get_footer).  
 
-# 3. Dependencies
+## 3. Dependencies
 
 - A sane compiler.
 - CMake (>= 2.6)
@@ -28,14 +33,14 @@ the command
 
     sudo apt-get install build-essential cmake swig libfreetype6-dev zlib1g-dev liblua5.1-0-dev libsdl-mixer1.2-dev libsdl1.2-dev
 
-# 4. Compiling
+## 4. Compiling
 
 cd into the jvgs folder, and then:
 
     cmake .
     make
 
-# 5. Running
+## 5. Running
 
 To execute run the game, use
 
@@ -51,6 +56,6 @@ again, use:
 
     ./src/jvgs main.lua --fullscreen yes
 
-# 6. License
+## 6. License
 
 JVGS is released under the [WTFPL](http://sam.zoy.org/wtfpl/).
