@@ -12,6 +12,7 @@ Carpooling
 
 ## 2. Ficheros
 
+- README.markdown: documento con descripción del proyecto.
 - ejemplo.php: fichero de ejemplo para empezar a probar cosas.
 - includes: carpeta con ficheros a incluir.
    - general.inc.php: contiene funciones de carácter general.
