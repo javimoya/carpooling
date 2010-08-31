@@ -1,5 +1,19 @@
 <?php
 
+$globals['nombrewebsite'] = "Compartir-Coche.org";
+//vayamosjuntos
+//compartamoscoche.net
+//compartirtransporte.com
+//icarpooling.com
+//coche-compartido.net
+//compartir-coche.es
+//compartir-coche.org   
+
+/*************** reCAPTCHA KEYS****************/
+$globals['publickey'] = "6LdYproSAAAAAHUwPokqT5EoCM7t9Qzuxdd4KsdQ";
+$globals['privatekey'] = "6LdYproSAAAAANf8S1zVDOGVVPd0AlEJ4FUbfdy0";
+
+
 /**
  * Load header template.
  *

@@ -16,6 +16,8 @@
 	<link rel="stylesheet" type="text/css" href="css/fancybox.css" />
 	<link rel="stylesheet" type="text/css" href="css/tooltip.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	   
+	<link rel="stylesheet" type="text/css" href="css/mio.css" />
 	
 	<!-- jQuery framework and utilities -->
 	<script type="text/javascript" src="js/jquery-1.4.min.js"></script>
@@ -35,7 +37,7 @@
 	<script type="text/javascript" src="js/jquery.localscroll-min.js"></script>
 	<!-- Inline popups/modal windows -->
 	<script type="text/javascript" src="js/jquery.fancybox-1.2.6.pack.js"></script>		
-	<!-- Font replacement (cuf�n) -->
+	<!-- Font replacement (cufón) -->
 	<script src="js/cufon-yui.js" type="text/javascript"></script>
 	<script src="js/LiberationSans.font.js" type="text/javascript"></script>
 
@@ -69,14 +71,116 @@
 	
 	<!-- form validation scripts (for contact page) -->
 	<script src="js/jquery.validate.min.js" type="text/javascript"></script>
+	
 	<script type="text/javascript">
-		// initialize form validation
-		$(document).ready(function() {
-			$("#CommentForm").validate();
-		});
+	   
+   $(document).ready(function(){
+      $('#CommentForm').attr('autocomplete', 'off'); 
+      $("#UserName").focus();
+
+   });
+   
+   $.validator.addMethod("username", function(value) {
+        return /^[a-z0-9\_]+$/i.test(value);
+   }, "Username must contain only letters, numbers, or underscore.");
+   
+	   
+	$.validator.addMethod('validChars', function (value) {
+
+		var result = true;
+
+		// unwanted characters
+
+		var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+
+        for (var i = 0; i < value.length; i++) {
+
+			if (iChars.indexOf(value.charAt(i)) != -1) {
+
+				return false;
+			}
+
+		}
+
+		return result;
+
+
+   }, '');
+
+   $().ready(function() {
+	
+   	// validate signup form on keyup and submit
+   	$("#CommentForm").validate({
+   		
+   		rules: {
+   			UserName: {
+   				required: true,
+   				minlength: 3,
+   				maxlength: 20,
+   				username: true		
+//   				remote: {
+//   			        url: "checkuser.php",
+//   			        type: "post"
+//   		        }
+   			},
+   			Password: {
+   				required: true,
+   				minlength: 5,
+   				maxlength: 20
+   			},
+   			RepeatPassword: {
+     				equalTo: "#Password"
+   			},
+   			Email: {
+   				required: true,
+   				email: true
+//   				remote: {
+//   			        url: "check-email.php",
+//   			        type: "post"
+//   		        }				
+   			},
+   			recaptcha_response_field: {
+   				required: true
+   			}   			
+   		},
+   		
+   		messages: {
+   			UserName: {
+   				required: "Debe informar el nombre de usuario",
+   				minlength: "El nombre de usuario debe tener al menos 3 carácteres",
+   				maxlength: "El nombre de usuario debe tener como máximo 20 carácteres",
+   				username: "El nombre de usuario sólo debe contener letras y números"
+   			},
+   			Password: {
+   				required: "Debe informar la clave",
+   				minlength: "La clave debe tener al menos 5 carácteres",
+   				maxlength: "La clave debe tener como máximo 20 carácteres"
+   			},
+   			RepeatPassword: {
+   	 		   equalTo: "No ha tecleado la misma clave"
+   			},
+   			Email: {
+   				required: "Debe informar el email",
+   				email: "Debe introducir un email válido"
+    			},   			
+   			recaptcha_response_field: {
+   				required: "Debe informar el código de seguridad"   				
+    			}   	    			
+   		}
+   	});
+   	
+   });	   
 	</script>
 	
-	
+
+   <script type="text/javascript">
+             var RecaptchaOptions = {
+                theme: 'custom',
+                lang: 'es',
+                custom_theme_widget: 'recaptcha_widget'
+             };
+   </script>	
+   
 </head>
 <body>
 

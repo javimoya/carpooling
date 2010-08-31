@@ -5,7 +5,7 @@ Carpooling
 
 1. Contenido
 2. Ficheros
-3. Dependencies
+3. Pendiente
 4. Compiling
 5. Running
 6. License
@@ -14,25 +14,24 @@ Carpooling
 
 - README.markdown: documento con descripción del proyecto.
 - ejemplo.php: fichero de ejemplo para empezar a probar cosas.
+- register.php: página para registrar nuevos usuarios.
+- recaptchalib.php: funciones proporcionadas por recaptcha para poder usarlo.
 - includes: carpeta con ficheros a incluir.
    - general.inc.php: contiene funciones de carácter general.
+   - dbc.inc.php: contiene lo relacionado con la base de datos.
    - header.php: contiene el código fuente de la cabecera. No se debe incluir directamente (usar la función get_header).
    - footer.php: contiene el código fuente del pie de página. No se debe incluir directamente (usar la función get_footer).  
+- css: carpeta con ficheros de hojas de estilo.
+   - mio.css: hoja de estilo propia.
+- images/mios: carpeta con mis propias imágenes (no de la plantilla).
+   - exclamation.png: icono usado en cajas con errores de validaciones de formularios.
+   - separador.gif: separador vertical del contenido.
+- sql: carpeta con consultas sqls usadas para la web. NO PUBLICAR.
+   - dbsql.sql: sql con la creación de la tabla de usuarios.
+   
+## 3. Pendiente
 
-## 3. Dependencies
-
-- A sane compiler.
-- CMake (>= 2.6)
-- SDL (>= 1.2)
-- SDL_mixer (>= 1.2)
-- FreeType (recent version)
-- Swig (recent version)
-- Lua (>= 5.1)
-
-On [Ubuntu](http://www.ubuntu.com/), these dependencies can be installed using
-the command
-
-    sudo apt-get install build-essential cmake swig libfreetype6-dev zlib1g-dev liblua5.1-0-dev libsdl-mixer1.2-dev libsdl1.2-dev
+- Realizar un script cron que se encargue de borrar usuarios registrados que no hayan activado su cuenta en 7 días.
 
 ## 4. Compiling
 

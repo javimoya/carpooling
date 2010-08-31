@@ -1,0 +1,25 @@
+
+.validation {
+   color: #D63301;
+	background: #fff6bf url('../images/mios/exclamation.png') center no-repeat;
+	background-position: 10px 50%; /* x-pos y-pos */
+	text-align: left;
+	padding: 15px 20px 15px 60px;
+	border-top: 2px solid #ffd324;
+	border-bottom: 2px solid #ffd324;
+	}
+	
+.separador {
+	background: transparent url("../images/mios/separador.gif") repeat-y 100% 0;}
+		
+.justificado {
+   text-align: justify; } 
+		
+		
+
+a[title]  { cursor: help; }
+a[title]:after  {  content: " *"; font-size: 85%; vertical-align: text-top; color: #D63301;}
+
+
+
+
