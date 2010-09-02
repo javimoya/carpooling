@@ -20,41 +20,12 @@
    
    get_header("register.php");
    
+   escribir_titulo("Regístrate", "Entra en la comunidad");
+
+   // Mostramos una caja con los errores encontrados tras hacer submit 
+   escribir_resultado_validaciones($hasError);
+   
 ?> 
-
-         <!-- Page Content -->
-         <div class="contentArea">
-            <!-- Title / Page Headline -->
-            <div class="full-page">
-               <h1 class="headline"><strong>Regístrate</strong> &nbsp;//&nbsp; Entra en la comunidad</h1>
-            </div>
-            
-            <div class="hr"></div>
-            
-            <!-- End of Content -->
-            <div class="clear"></div>
-         </div>
-
-            
-         <?php if(isset($hasError)) { // Mostramos una caja con los errores encontrados tras hacer submit ?>
-
-         <div class="contentArea">
-            <!-- Title / Page Headline -->
-            <div class="full-page">
-               <div class="validation"><strong>Se han producido los siguientes errores:</strong><br><br>
-               <?php foreach ($hasError as $i => $value) {
-                  echo "&nbsp;&nbsp;&nbsp;● " . $value . "<br>";
-               }
-               ?>
-               </div>               
-            </div>
-            
-            <!-- End of Content -->
-            <div class="clear"></div>
-         </div>
-         
-         <?php } ?>
-
 
          <div class="contentArea">
 
@@ -136,7 +107,7 @@
       global $hasError, $data, $dbc, $globals;
 
       // Valido el captcha      
-      require_once('recaptchalib.php');
+      require_once('/includes/recaptchalib.php');
       $resp = recaptcha_check_answer ($globals['privatekey'],
                                    $_SERVER["REMOTE_ADDR"],
                                    $_POST["recaptcha_challenge_field"],

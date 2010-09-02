@@ -17,81 +17,100 @@ $globals['host'] = $_SERVER['HTTP_HOST']; // compartir-coche.org
 $globals['path'] = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 
 
-
-/**
- * Load header template.
- *
- * Includes the header template for a theme or if a name is specified then a
- * specialised header will be included.
- *
- * For the parameter, if the file is called "header-special.php" then specify
- * "special".
- *
- * @uses locate_template()
- * @since 1.5.0
- * @uses do_action() Calls 'get_header' action.
- *
- * @param string $name The name of the specialised header.
- */
-function get_header( $paginaJs = null ) {
+function get_header( $paginaJs = null ) 
+{
    include("header.php");
 }
 
-function incluirJavascript( $pagina ) {
+function incluirJavascript( $pagina ) 
+{
    include("javascript.php");
 }
 
-/**
- * Load header template.
- *
- * Includes the header template for a theme or if a name is specified then a
- * specialised header will be included.
- *
- * For the parameter, if the file is called "header-special.php" then specify
- * "special".
- *
- * @uses locate_template()
- * @since 1.5.0
- * @uses do_action() Calls 'get_header' action.
- *
- * @param string $name The name of the specialised header.
- */
-function get_footer( $name = null ) {    
+function get_footer( $name = null ) 
+{
    include("footer.php");
 }
+
+function escribir_titulo($primero, $segundo)
+{
+   ?>
+         <div class="contentArea">
+            <div class="full-page">
+               <h1 class="headline"><strong><?php echo $primero; ?></strong> &nbsp;//&nbsp; <?php echo $segundo; ?></h1>
+            </div>            
+            <div class="hr"></div>
+            <div class="clear"></div>
+         </div>            
+   <?php         
+}
+
+function escribir_caja_resultado(&$mensaje, $tipo)
+{
+   if(isset($mensaje)) {   ?>
+
+      <div class="contentArea">
+         <div class="full-page">
+            <div class="<?php echo $tipo; ?>">
+               <strong><?php echo $mensaje; ?></strong>
+            </div>
+         </div>
+         <div class="clear"></div>
+      </div>
+         
+      <?php 
+      $mensaje = null;
+   } 
+}
+
+function escribir_resultado_validaciones( &$array ) 
+{
+   if(isset($array)) { ?>
+
+      <div class="contentArea">
+         <div class="full-page">
+            <div class="validation">
+               <strong>Se han producido los siguientes errores:</strong><br><br>
+               <?php foreach ($array as $i => $value) {
+                     echo "&nbsp;&nbsp;&nbsp;‚óè " . $value . "<br>";
+               } ?>
+            </div>               
+         </div>         
+      <div class="clear"></div>
+      </div>
+         
+   <?php } 
+}
+
 
 function enviar_correo_registro($usr_email,$md5_id,$activ_code)
 {
    global $globals;
                   
-   require_once('class.phpmailer-lite.php');
-   
+   require_once('class.phpmailer-lite.php');   
    
 
-   $mail             = new PHPMailerLite(); 
+   $mail = new PHPMailerLite(); 
    
    $mail->From = 'auto-reply@' . $globals['host'];
    $mail->FromName = $globals['nombrewebsite'];
 
    $mail->IsMail(); // telling the class to use native PHP mail()
-   
-         $a_link = 
-
-      
-         $message = 
-"°Hola!<br><br>
+         
+   $message = 
+"¬°Hola!<br><br>
 
 Muchas gracias por registrarte en $globals[nombrewebsite].<br><br>
 
-A˙n queda un ˙ltimo paso. Pulsa sobre el siguiente enlace (o copia y pÈgalo en tu navegador) para completar el registro y activar tu cuenta:<br>
+A√∫n queda un √∫ltimo paso. Pulsa sobre el siguiente enlace (o copia y p√©galo en tu navegador) para completar el registro y activar tu cuenta:<br>
 http://" . $globals['host'] . $globals['path'] . "/activate.php?user=$md5_id&activ_code=$activ_code<br><br>
 
-Si has recibido este mensaje por error, simplemente bÛrralo.<br><br>
+Si has recibido este mensaje por error, simplemente b√≥rralo.<br><br>
 
 Atentamente,<br>
 El equipo de $globals[nombrewebsite]<br>
 ______________________________________________________<br>
-ESTE ES UN MENSAJE GENERADO AUTOM¡TICAMENTE<br>
+ESTE ES UN MENSAJE GENERADO AUTOM√ÅTICAMENTE<br>
 ****NO RESPONDA A ESTE CORREO****<br>
 ";
    
@@ -99,7 +118,7 @@ ESTE ES UN MENSAJE GENERADO AUTOM¡TICAMENTE<br>
      
      $mail->AddReplyTo('auto-reply@' . $globals['host'], $globals['nombrewebsite']);
      $mail->AddAddress($usr_email);
-     $mail->Subject = 'Confirma tu direcciÛn de correo electrÛnico';    
+     $mail->Subject = 'Confirma tu direcci√≥n de correo electr√≥nico';    
      $mail->MsgHTML($message);
      $mail->isHtml(false);
      $mail->Send();

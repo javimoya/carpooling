@@ -1,7 +1,7 @@
 <?php 
    
    include("includes/general.inc.php");
-   include("includes/dbc.inc.php");
+   include("includes/dbc.inc.php");
   
    page_protect(false, true);
    
@@ -28,70 +28,16 @@
    }
       
    get_header("thankyou.php");
+
+   escribir_titulo("Cuenta pendiente de activación", "Mira tu buzón");
+   escribir_caja_resultado($_SESSION['hasSuccess'],"success");
+   escribir_caja_resultado($_SESSION['hasInfo'],"information");
+   // Mostramos una caja con los errores encontrados tras hacer submit 
+   escribir_resultado_validaciones($hasError);   
       
-?> 
+?>
 
-         <!-- Page Content -->
-         <div class="contentArea">
-            <!-- Title / Page Headline -->
-            <div class="full-page">
-               <h1 class="headline"><strong>Cuenta pendiente de activación</strong> &nbsp;//&nbsp; Mira tu buzón</h1>
-            </div>
-            
-            <div class="hr"></div>
-            
-            <!-- End of Content -->
-            <div class="clear"></div>
-         </div>
-         
-         
-         <?php if(isset($_SESSION['hasSuccess'])) { // Mostramos una caja con los errores encontrados tras hacer submit ?>
 
-         <div class="contentArea">
-            <!-- Title / Page Headline -->
-            <div class="full-page">
-               <div class="success"><strong><?php echo $_SESSION['hasSuccess']; ?></strong></div>               
-            </div>
-            
-            <!-- End of Content -->
-            <div class="clear"></div>
-         </div>
-         
-         <?php $_SESSION['hasSuccess'] = null;  } ?>    
-         
-         <?php if(isset($_SESSION['hasInfo'])) { // Mostramos una caja con los errores encontrados tras hacer submit ?>
-
-         <div class="contentArea">
-            <!-- Title / Page Headline -->
-            <div class="full-page">
-               <div class="information"><strong><?php echo $_SESSION['hasInfo']; ?></strong></div>               
-            </div>
-            
-            <!-- End of Content -->
-            <div class="clear"></div>
-         </div>
-         
-         <?php $_SESSION['hasInfo'] = null;  } ?>                       
-         
-         <?php if(isset($hasError)) { // Mostramos una caja con los errores encontrados tras hacer submit ?>
-
-         <div class="contentArea">
-            <!-- Title / Page Headline -->
-            <div class="full-page">
-               <div class="validation"><strong>Se han producido los siguientes errores:</strong><br><br>
-               <?php foreach ($hasError as $i => $value) {
-                  echo "&nbsp;&nbsp;&nbsp;● " . $value . "<br>";
-               }
-               ?>
-               </div>               
-            </div>
-            
-            <!-- End of Content -->
-            <div class="clear"></div>
-         </div>
-         
-         <?php } ?>         
-         
          <div class="contentArea">
 
             <div class="full-page">

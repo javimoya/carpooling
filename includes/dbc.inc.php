@@ -1,27 +1,4 @@
 <?php
-/*************** PHP LOGIN SCRIPT V 2.3*********************
-(c) Balakrishnan 2010. All Rights Reserved
-
-Usage: This script can be used FREE of charge for any commercial or personal projects. Enjoy!
-
-Limitations:
-- This script cannot be sold.
-- This script should have copyright notice intact. Dont remove it please...
-- This script may not be provided for download except from its original site.
-
-For further usage, please contact me.
-
-/******************** MAIN SETTINGS - PHP LOGIN SCRIPT V2.1 **********************
-Please complete wherever marked xxxxxxxxx
-
-/************* MYSQL DATABASE SETTINGS *****************
-1. Specify Database name in $dbname
-2. MySQL host (localhost or remotehost)
-3. MySQL user name with ALL previleges assigned.
-4. MySQL password
-
-Note: If you use cpanel, the name will be like account_database
-*************************************************************/
 
 define ("DB_HOST", "127.0.0.1"); // set database host
 define ("DB_USER", "admin"); // set database user
@@ -31,23 +8,10 @@ define ("DB_NAME","carpoolingdb"); // set database name
 $dbc['link'] = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 $dbc['db'] = mysql_select_db(DB_NAME, $dbc['link']) or die("Couldn't select database");
 
-/* Registration Type (Automatic or Manual) 
- 1 -> Automatic Registration (Users will receive activation code and they will be automatically approved after clicking activation link)
- 0 -> Manual Approval (Users will not receive activation code and you will need to approve every user manually)
-*/
-$dbc['$user_registration'] = 1;  // set 0 or 1
-
 define("COOKIE_TIME_OUT", 10); //specify cookie timeout in days (default is 10 days)
 define('SALT_LENGTH', 9); // salt for password
 
-//define ("ADMIN_NAME", "admin"); // sp
-
-/* Specify user levels */
-define ("ADMIN_LEVEL", 5);
-define ("USER_LEVEL", 1);
-define ("GUEST_LEVEL", 0);
-
-// filtra ("sanitiza") datos introducidos por el usuario para evitar código malicioso
+// filtra ("sanitiza") datos introducidos por el usuario para evitar cÃ³digo malicioso
 function filter($data) {
 	$data = trim(htmlentities(strip_tags($data)));
 	
@@ -205,125 +169,14 @@ function logout($ir_a_login=true)
 
 function isUserID($username)
 {
-	if (preg_match('/^[a-z\d_]{5,20}$/i', $username)) {
-		return true;
-	} else {
-		return false;
-	}
- }	
- 
-
-
-/**************************/
-
-function EncodeURL($url)
-{
-$new = strtolower(ereg_replace(' ','_',$url));
-return($new);
-}
-
-function DecodeURL($url)
-{
-$new = ucwords(ereg_replace('_',' ',$url));
-return($new);
-}
-
-function ChopStr($str, $len) 
-{
-    if (strlen($str) < $len)
-        return $str;
-
-    $str = substr($str,0,$len);
-    if ($spc_pos = strrpos($str," "))
-            $str = substr($str,0,$spc_pos);
-
-    return $str . "...";
-}	
-
-
-function isEmail($email){
-  return preg_match('/^\S+@[\w\d.-]{2,}\.[\w]{2,6}$/iU', $email) ? TRUE : FALSE;
-}
-
-function isURL($url) 
-{
-	if (preg_match('/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i', $url)) {
-		return true;
-	} else {
-		return false;
-	}
-} 
-
-function checkPwd($x,$y) 
-{
-if(empty($x) || empty($y) ) { return false; }
-if (strlen($x) < 4 || strlen($y) < 4) { return false; }
-
-if (strcmp($x,$y) != 0) {
- return false;
+   if (preg_match('/^[a-z\d_]{5,20}$/i', $username)) 
+   {
+      return true;
+   } 
+   else 
+   {
+      return false;
+   }
  } 
-return true;
-}
-
-function GenPwd($length = 7)
-{
-  $password = "";
-  $possible = "0123456789bcdfghjkmnpqrstvwxyz"; //no vowels
-  
-  $i = 0; 
-    
-  while ($i < $length) { 
-
-    
-    $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
-       
-    
-    if (!strstr($password, $char)) { 
-      $password .= $char;
-      $i++;
-    }
-
-  }
-
-  return $password;
-
-}
-
-function GenKey($length = 7)
-{
-  $password = "";
-  $possible = "0123456789abcdefghijkmnopqrstuvwxyz"; 
-  
-  $i = 0; 
-    
-  while ($i < $length) { 
-
-    
-    $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
-       
-    
-    if (!strstr($password, $char)) { 
-      $password .= $char;
-      $i++;
-    }
-
-  }
-
-  return $password;
-
-}
-
-
-
-
-
-function checkAdmin() {
-
-if($_SESSION['user_level'] == ADMIN_LEVEL) {
-return 1;
-} else { return 0 ;
-}
-
-}
-
+ 
 ?>

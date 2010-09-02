@@ -20,15 +20,15 @@ Carpooling
 
 - .htaccess: configuración apache
 
-- recaptchalib.php: funciones proporcionadas por recaptcha para poder usarlo.
-- class.phpmailer-lite.php: clase para enviar correos. No uso directamente el mail de php por seguridad.
-
 - includes: carpeta con ficheros a incluir.
    - general.inc.php: contiene funciones de carácter general.
    - dbc.inc.php: contiene lo relacionado con la base de datos.
    - header.php: contiene el código fuente de la cabecera. No se debe incluir directamente (usar la función get_header).
    - footer.php: contiene el código fuente del pie de página. No se debe incluir directamente (usar la función get_footer).  
    - javascript.php: contiene la parte javascript de cada página.   
+   - recaptchalib.php: funciones proporcionadas por recaptcha para poder usarlo.
+   - class.phpmailer-lite.php: clase para enviar correos. No uso directamente el mail de php por seguridad.
+   
 - css: carpeta con ficheros de hojas de estilo.
    - mio.css: hoja de estilo propia.
 - images/mios: carpeta con mis propias imágenes (no de la plantilla).
