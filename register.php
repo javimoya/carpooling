@@ -1,15 +1,13 @@
 <?php 
 
    include("includes/general.inc.php");
-   include("includes/dbc.inc.php");
-     
+   include("includes/dbc.inc.php");   
+   
+   page_protect(false, true);
+        
    // Cuando pulsamos submit del formulario entramos por aquí...
    if (array_key_exists('doRegister', $_POST)) 
    {
-      /******************* Filtering/Sanitizing Input *****************************
-      This code filters harmful script code and escapes data of all POST data
-      from the user submitted form.
-      *****************************************************************/
       // Filtramos todos los campos del formulario, para evitar código malicioso
       foreach($_POST as $key => $value) {
       	$data[$key] = filter($value);
@@ -20,7 +18,7 @@
                
    }
    
-   get_header();
+   get_header("register.php");
    
 ?> 
 
@@ -28,7 +26,7 @@
          <div class="contentArea">
             <!-- Title / Page Headline -->
             <div class="full-page">
-               <h1 class="headline"><strong>Regístrate</strong> &nbsp;//&nbsp; Entra en la Comunidad.</h1>
+               <h1 class="headline"><strong>Regístrate</strong> &nbsp;//&nbsp; Entra en la comunidad</h1>
             </div>
             
             <div class="hr"></div>
@@ -69,7 +67,7 @@
                         
                <p>Una vez completado el registro tendrás acceso a todas las secciones de la web. Es completamente gratis y no lleva más de 1 minuto.</p>
                
-               <form class="cmxform" id="CommentForm" method="post" action="#" >
+               <form class="cmxform" id="CommentForm" method="post" action="<?= $_SERVER['PHP_SELF'] ?>" >
                   <fieldset>
                      <legend>Formulario de Registro</legend>
                      <div>
@@ -152,10 +150,7 @@
       
       // hash sha1 de la clave
       $sha1pass = PwdHash($data['Password']);
-      
-      $host  = $_SERVER['HTTP_HOST']; // compartir-coche.org
-      $path   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-      
+            
       // Generamos el código de activación
       $activ_code = rand(1000,9999);
       
@@ -198,45 +193,18 @@
          $md5_id = md5($user_id);
          mysql_query("update users set md5_id='$md5_id' where id='$user_id'");
        
-         if($dbc['$user_registration'])  {
-            
-            $a_link = 
-"Aún queda un último paso. Pulsa sobre el siguiente enlace para completar el registro y activar tu cuenta:
-http://$host$path/activate.php?user=$md5_id&activ_code=$activ_code"; 
-         } else {
-            $a_link = 
-"Tu cuenta está pendiente de aprobación y pronto será activada por el administrador.";
-         }
-      
-         $message = 
-"¡Hola!
-Muchas gracias por registrarte en $globals[nombrewebsite].
-
-$a_link
-
-Atentamente,
-El equipo de $globals[nombrewebsite]
-______________________________________________________
-ESTE ES UN MENSAJE GENERADO AUTOMÁTICAMENTE
-****NO RESPONDA A ESTE CORREO****
-";
-
-//Nombre de Usuario: $user_name
-//Correo: $usr_email
-//Contraseña: $data[Password]
-
-      
-         mail($usr_email, "Confirma tu dirección de correo electrónico", $message,
-               "From: \"$globals[nombrewebsite]\" <auto-reply@$host>\r\n" .
-               "X-Mailer: PHP/" . phpversion());
+         $_SESSION['email_registro'] = $usr_email; 
+         $_SESSION['email_registro_contador'] = 3; 
+         $_SESSION['hasSuccess'] = null;          
+         
+         enviar_correo_registro($usr_email,$md5_id,$activ_code);
       
          header("Location: thankyou.php");  
          
          exit();
-      	 
+     
       } 
-   }					 
-   
+   }   
    
 ?>
 	

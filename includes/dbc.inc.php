@@ -59,7 +59,7 @@ function filter($data) {
 	return $data;
 }
 
-// algoritmo hash para convertir claves
+// algoritmo hash
 function PwdHash($pwd, $salt = null)
 {
     if ($salt === null)     {
@@ -71,73 +71,150 @@ function PwdHash($pwd, $salt = null)
     return $salt . sha1($pwd . $salt);
 }
 
-
-/**** PAGE PROTECT CODE  ********************************
-This code protects pages to only logged in users. If users have not logged in then it will redirect to login page.
-If you want to add a new page and want to login protect, COPY this from this to END marker.
-Remember this code must be placed on very top of any html or php page.
-********************************************************/
-
-function page_protect() {
-session_start();
-
-global $dbc; 
-
-/* Secure against Session Hijacking by checking user agent */
-if (isset($_SESSION['HTTP_USER_AGENT']))
+function page_protect($ir_a_login = true, $ir_a_myaccount_si_conectado = false) 
 {
-    if ($_SESSION['HTTP_USER_AGENT'] != md5($_SERVER['HTTP_USER_AGENT']))
-    {
-        logout();
-        exit;
-    }
+   $usuario_conectado=false;
+
+   session_start();
+   
+   global $db; 
+   
+   /* Secure against Session Hijacking by checking user agent */
+   if (isset($_SESSION['HTTP_USER_AGENT']))
+   {
+       if ($_SESSION['HTTP_USER_AGENT'] != md5($_SERVER['HTTP_USER_AGENT']))
+       {
+           logout($ir_a_login);
+           exit;
+       }
+   }
+   
+   // before we allow sessions, we need to check authentication key - ckey and ctime stored in database
+   
+   /* If session not set, check for cookies set by Remember me */
+   if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name']) ) 
+   {
+      if(isset($_COOKIE['user_id']) && isset($_COOKIE['user_key']))
+      {
+         /* we double check cookie expiry time against stored in database */
+      
+         $cookie_user_id  = filter($_COOKIE['user_id']);
+         $rs_ctime = mysql_query("select `ckey`,`ctime` from `users` where `id` ='$cookie_user_id'") or die(mysql_error());
+         list($ckey,$ctime) = mysql_fetch_row($rs_ctime);
+         // coookie expiry
+         if( (time() - $ctime) > 60*60*24*COOKIE_TIME_OUT) 
+         {
+            logout($ir_a_login);
+         }
+         else
+         {
+         
+            /* Security check with untrusted cookies - dont trust value stored in cookie.       
+            /* We also do authentication check of the `ckey` stored in cookie matches that stored in database during login*/
+      
+            if( !empty($ckey) && is_numeric($_COOKIE['user_id']) && isUserID($_COOKIE['user_name']) && $_COOKIE['user_key'] == sha1($ckey)  ) 
+            {
+               session_regenerate_id(); //against session fixation attacks.
+      
+               $_SESSION['user_id'] = $_COOKIE['user_id'];
+               $_SESSION['user_name'] = $_COOKIE['user_name'];
+               
+               /* query user level from database instead of storing in cookies */   
+               list($user_level) = mysql_fetch_row(mysql_query("select user_level from users where id='$_SESSION[user_id]'"));
+      
+               $_SESSION['user_level'] = $user_level;
+               $_SESSION['HTTP_USER_AGENT'] = md5($_SERVER['HTTP_USER_AGENT']);
+               
+               $usuario_conectado=true;
+            
+            } 
+            else 
+            {
+               logout($ir_a_login);
+            }
+            
+         }
+         
+      } 
+      else 
+      {
+         if ($ir_a_login)
+         {
+            header("Location: login.php");
+            exit();
+         }
+      }
+   }
+   else
+   {
+      $usuario_conectado=true;
+   }
+   
+   if ($usuario_conectado && $ir_a_myaccount_si_conectado)
+   {
+            echo "estoy conectado y voy a myaccount!!" ; // pendiente
+            exit();
+   }
 }
 
-// before we allow sessions, we need to check authentication key - ckey and ctime stored in database
 
-/* If session not set, check for cookies set by Remember me */
-if (!isset($_SESSION['user_id']) && !isset($_SESSION['user_name']) ) 
+function logout($ir_a_login=true)
 {
-	if(isset($_COOKIE['user_id']) && isset($_COOKIE['user_key'])){
-	/* we double check cookie expiry time against stored in database */
-	
-	$cookie_user_id  = filter($_COOKIE['user_id']);
-	$rs_ctime = mysql_query("select `ckey`,`ctime` from `users` where `id` ='$cookie_user_id'") or die(mysql_error());
-	list($ckey,$ctime) = mysql_fetch_row($rs_ctime);
-	// coookie expiry
-	if( (time() - $ctime) > 60*60*24*COOKIE_TIME_OUT) {
+   global $db;
+   session_start();
+   
+   if (isset($_SESSION['user_id']))
+   {
+      mysql_query("update `users` 
+         set `ckey`= '', `ctime`= '' 
+         where `id`='$_SESSION[user_id]'") or die(mysql_error());
+   }     
+   else
+   {      
+      if ((isset($_COOKIE['user_id'])) && is_numeric($_COOKIE['user_id']))
+      {   
+         $cookie_user_id  = filter($_COOKIE['user_id']);
+      }
+   
+      if (isset($cookie_user_id)) 
+      {
+         mysql_query("update `users` 
+            set `ckey`= '', `ctime`= '' 
+            where `id` = '$_COOKIE[user_id]'") or die(mysql_error());
+      }
+   }
 
-		logout();
-		}
-/* Security check with untrusted cookies - dont trust value stored in cookie. 		
-/* We also do authentication check of the `ckey` stored in cookie matches that stored in database during login*/
+   /************ Delete the sessions****************/
+   unset($_SESSION['user_id']);
+   unset($_SESSION['user_name']);
+   unset($_SESSION['user_level']);
+   unset($_SESSION['HTTP_USER_AGENT']);
+   session_unset();
+   session_destroy(); 
+   
+   /* Delete the cookies*******************/
+   setcookie("user_id", '', time()-60*60*24*COOKIE_TIME_OUT, "/");
+   setcookie("user_name", '', time()-60*60*24*COOKIE_TIME_OUT, "/");
+   setcookie("user_key", '', time()-60*60*24*COOKIE_TIME_OUT, "/");
+   
+   if ($ir_a_login)
+   {
+      header("Location: login.php");
+   }
+}   
 
-	 if( !empty($ckey) && is_numeric($_COOKIE['user_id']) && isUserID($_COOKIE['user_name']) && $_COOKIE['user_key'] == sha1($ckey)  ) {
-	 	  session_regenerate_id(); //against session fixation attacks.
-	
-		  $_SESSION['user_id'] = $_COOKIE['user_id'];
-		  $_SESSION['user_name'] = $_COOKIE['user_name'];
-		/* query user level from database instead of storing in cookies */	
-		  list($user_level) = mysql_fetch_row(mysql_query("select user_level from users where id='$_SESSION[user_id]'"));
-
-		  $_SESSION['user_level'] = $user_level;
-		  $_SESSION['HTTP_USER_AGENT'] = md5($_SERVER['HTTP_USER_AGENT']);
-		  
-	   } else {
-	   logout();
-	   }
-
-  } else {
-	header("Location: login.php");
-	exit();
+function isUserID($username)
+{
+	if (preg_match('/^[a-z\d_]{5,20}$/i', $username)) {
+		return true;
+	} else {
+		return false;
 	}
-}
-}
+ }	
+ 
 
 
-
-
-
+/**************************/
 
 function EncodeURL($url)
 {
@@ -163,19 +240,11 @@ function ChopStr($str, $len)
     return $str . "...";
 }	
 
+
 function isEmail($email){
   return preg_match('/^\S+@[\w\d.-]{2,}\.[\w]{2,6}$/iU', $email) ? TRUE : FALSE;
 }
 
-function isUserID($username)
-{
-	if (preg_match('/^[a-z\d_]{5,20}$/i', $username)) {
-		return true;
-	} else {
-		return false;
-	}
- }	
- 
 function isURL($url) 
 {
 	if (preg_match('/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i', $url)) {
@@ -245,32 +314,6 @@ function GenKey($length = 7)
 }
 
 
-function logout()
-{
-global $dbc;
-session_start();
-
-if(isset($_SESSION['user_id']) || isset($_COOKIE['user_id'])) {
-mysql_query("update `users` 
-			set `ckey`= '', `ctime`= '' 
-			where `id`='$_SESSION[user_id]' OR  `id` = '$_COOKIE[user_id]'") or die(mysql_error());
-}			
-
-/************ Delete the sessions****************/
-unset($_SESSION['user_id']);
-unset($_SESSION['user_name']);
-unset($_SESSION['user_level']);
-unset($_SESSION['HTTP_USER_AGENT']);
-session_unset();
-session_destroy(); 
-
-/* Delete the cookies*******************/
-setcookie("user_id", '', time()-60*60*24*COOKIE_TIME_OUT, "/");
-setcookie("user_name", '', time()-60*60*24*COOKIE_TIME_OUT, "/");
-setcookie("user_key", '', time()-60*60*24*COOKIE_TIME_OUT, "/");
-
-header("Location: login.php");
-}
 
 
 

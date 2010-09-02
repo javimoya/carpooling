@@ -61,7 +61,7 @@
 	</div>
 </div>
 
-<!-- Activate Font Replacement (cufón) -->
+<!-- Activate Font Replacement (cufÃ³n) -->
 <script type="text/javascript"> Cufon.now(); </script>
 </body>
 </html>

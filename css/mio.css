@@ -1,25 +1,73 @@
+/* para arreglar que el pie de página se queda sin fondo, cuando la página es pequeña */
+body {
+   background: #E4EFF2;
+}
+   
+   
+/* cuadro para mostrar validaciones de formularios, mensajes de éxito y de información */
+.validation, .success, .information {
+   background-position: 10px 50%; /* x-pos y-pos */
+   background-repeat: no-repeat;
+   text-align: left;
+   padding: 15px 20px 15px 60px;
+   border-top: 2px solid;
+   border-bottom: 2px solid;
+   margin-top: -20px;
+}
 
 .validation {
    color: #D63301;
-	background: #fff6bf url('../images/mios/exclamation.png') center no-repeat;
-	background-position: 10px 50%; /* x-pos y-pos */
-	text-align: left;
-	padding: 15px 20px 15px 60px;
-	border-top: 2px solid #ffd324;
-	border-bottom: 2px solid #ffd324;
-	}
-	
-.separador {
-	background: transparent url("../images/mios/separador.gif") repeat-y 100% 0;}
-		
-.justificado {
-   text-align: justify; } 
-		
-		
+   background-color: #fff6bf;
+   background-image: url('../images/mios/exclamation.png'); 
+   border-color: #ffd324;
+}
 
+.success {
+   color: #4F8A10;
+   background-color: #DFF2BF;
+   background-image: url('../images/mios/success.png');  
+}
+
+.information {
+   color: #00529B;
+   background-color: #BDE5F8;
+   background-image: url('../images/mios/info.png');  
+}
+
+/* para poner una barra vertical */
+.separador {
+   background: transparent url("../images/mios/separador.gif") repeat-y 100% 0;
+}
+
+/* para alineación completa de una sección */
+.justificado {
+   text-align: justify; 
+}
+      
+      
+/* para poner un asterisco y el cursor de ayuda en tooltips */
 a[title]  { cursor: help; }
 a[title]:after  {  content: " *"; font-size: 85%; vertical-align: text-top; color: #D63301;}
 
 
+/* para poner mensajes que ocupan toda la página con una imagen a la izquierda */
+.mensaje {   
+   /* width: 700px; margin-left:auto; margin-right:auto; */
+   margin-left:5%; margin-right:5%;
+   /*background-position: 0px 50%; */
+   background-position:left top;
+   background-repeat:no-repeat;
+   text-align: justify;
+   padding-left: 90px;  
+   padding-bottom: 25px;
+}
+   
+/* aquí para seleccionar la imagen a mostrar */
+.mensaje#mensaje_email {
+   background-image: url('../images/mios/icn_mail_received2.png');
+}
 
-
+/* no lo hago con jquery porque en IE da problemas de presentación */
+#oculto-inicialmente {
+   display:none;
+}
