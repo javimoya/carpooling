@@ -23,6 +23,38 @@ function filter($data) {
 	return $data;
 }
 
+
+
+function log_get($tipo, $user_id=0, $seconds=0) 
+{
+   global $dbc, $globals;
+
+   $ip = $globals['real_ip'];
+   
+   if ($seconds > 0) 
+   {
+      $interval = "and log_date > date_sub(now(), interval $seconds second)";
+   } else $interval = '';
+   $rs_duplicate = mysql_query("select count(*) from logs where log_type='$tipo' $interval and log_user_id = $user_id order by log_date desc limit 1") or die(mysql_error());
+   list($total) = mysql_fetch_row($rs_duplicate);
+   return $total;
+}
+
+function log_insert($tipo, $user_id=0) 
+{
+   global $dbc, $globals;
+
+   $ip = $globals['real_ip'];
+   
+   $sql_insert = "INSERT into `logs`
+               (`log_date`,`log_type`,`log_ip`,`log_user_id`)
+                VALUES
+                (now(), '$tipo', '$ip', $user_id)
+               ";
+               
+   mysql_query($sql_insert,$dbc['link']) or die("Insertion Failed:" . mysql_error());   
+}
+
 // algoritmo hash
 function PwdHash($pwd, $salt = null)
 {

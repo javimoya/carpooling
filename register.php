@@ -4,6 +4,17 @@
    include("includes/dbc.inc.php");   
    
    page_protect(false, true);
+   
+   get_global_ip();
+   
+   function debo_mostrar_captcha()
+   {
+      // Sólo mostramos el captcha si se ha registrado con éxito ya esta ip en las últimas 24 horas
+      // o si se han fallado 3 veces durante el registro en las últimas 24 horas
+      return ((log_get("register_ok", 0, 24*60*60)>0) || (log_get("register_fail", 0, 24*60*60)>=4));
+   }
+   
+   $mostrar_captcha = debo_mostrar_captcha();   
         
    // Cuando pulsamos submit del formulario entramos por aquí...
    if (array_key_exists('doRegister', $_POST)) 
@@ -16,9 +27,9 @@
       // Validamos los datos, y si son correctos creamos el usuario
       do_register();      
                
-   }
+   }   
    
-   get_header("register.php");
+   get_header("register.php", $mostrar_captcha);
    
    escribir_titulo("Regístrate", "Entra en la comunidad");
 
@@ -57,12 +68,14 @@
                         <label for="Email"><a TABINDEX=-1 href="#" title="¿Para qué lo queremos?|Necesitamos tu dirección de correo electrónico para confirmar tu registro y para que te podamos recordar tu contraseña si la pierdes. En ningún momento será visible para el resto de usuarios ni se usará para enviarte SPAM ni nada por el estilo.">Correo electrónico</a><br></label>
                         <input id="Email" name="Email" class="textInput" <?php if(isset($_POST["Email"])) echo 'value="' . $_POST["Email"] . '"'; ?> />
                      </div>
-         
+                     
+                     <?php if ($mostrar_captcha) { ?>
                      <div id="recaptcha_widget" style="display:none"><div id="recaptcha_image" style="border:1px solid #333;"></div>
                         <label for="recaptcha_response_field"><a TABINDEX=-1 href="#" title="¿Qué es esto?|Este tipo de imágenes (conocidas como &quot;captchas&quot;) son utilizadas para evitar que programas automáticos puedan registrarse.">¿Eres un humano?</a> Escribe las 2 palabras de arriba<br><a TABINDEX=-1 href="javascript:Recaptcha.reload()">(Pulsa aquí para obtener otras dos palabras)</a><br></label>
                         <input id="recaptcha_response_field" name="recaptcha_response_field" class="textInput" />   
                      <script type="text/javascript" src="//www.google.com/recaptcha/api/challenge?k=<?php echo $globals['publickey']; ?>"></script>
                      </div>
+                     <?php } ?>
 
                      <div>
                         <button name="doRegister" value="Register" type="submit" class="btn"><span>Crear mi cuenta</span></button>
@@ -104,18 +117,20 @@
    
    function do_register() {
       
-      global $hasError, $data, $dbc, $globals;
+      global $hasError, $data, $dbc, $globals, $mostrar_captcha;
 
-      // Valido el captcha      
-      require_once('/includes/recaptchalib.php');
-      $resp = recaptcha_check_answer ($globals['privatekey'],
-                                   $_SERVER["REMOTE_ADDR"],
-                                   $_POST["recaptcha_challenge_field"],
-                                   $_POST["recaptcha_response_field"]);
-   
-      if (!$resp->is_valid) {
-        $hasError[] = "El código de seguridad no es correcto.";
-      }     
+      if ($mostrar_captcha) { 
+         // Valido el captcha      
+         require_once('/includes/recaptchalib.php');
+         $resp = recaptcha_check_answer ($globals['privatekey'],
+                                    $_SERVER["REMOTE_ADDR"],
+                                    $_POST["recaptcha_challenge_field"],
+                                    $_POST["recaptcha_response_field"]);
+      
+         if (!$resp->is_valid) {
+            $hasError[] = "El código de seguridad no es correcto.";
+         }     
+      }
       
       $user_ip = $_SERVER['REMOTE_ADDR'];
       
@@ -147,8 +162,7 @@
       {         
          $hasError[] = "El email ya está dado de alta.";
       }
-            
-      
+                        
       if(empty($hasError)) {
       
          // Insertamos el Nuevo Usuario
@@ -163,6 +177,8 @@
          $user_id = mysql_insert_id($dbc['link']);  
          $md5_id = md5($user_id);
          mysql_query("update users set md5_id='$md5_id' where id='$user_id'");
+         
+         log_insert("register_ok");
        
          $_SESSION['email_registro'] = $usr_email; 
          $_SESSION['email_registro_contador'] = 3; 
@@ -174,6 +190,12 @@
          
          exit();
      
+      }
+      else
+      {
+         log_insert("register_fail");   
+                  
+         $mostrar_captcha = debo_mostrar_captcha();         
       } 
    }   
    

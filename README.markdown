@@ -55,7 +55,7 @@ Carpooling
    
    - El proceso de registro debe ser fácil y rápido para no desanimar al potencial usuario. Mientras menos campos se le pidan mejor.
       - En el formulario de registro no se le pide repetir el email como suele ser habitual para evitar errores. -> Tras enviarle el correo para confirmar el registro se le permite cambiarlo si se ha equivocado mientras aún no haya realizado la activación.
-      - El captcha es necesario por motivos de seguridad (evitar registros automáticos), pero es muy molesto para el usuario. Sólo se muestra en ips que tengan ya X registros anteriores -fallidos y exitosos- (o por fecha). PENDIENTE
+      - El captcha es necesario por motivos de seguridad (evitar registros automáticos), pero es muy molesto para el usuario. Sólo se muestra en ips que tengan ya X registros anteriores -fallidos y exitosos- (o por fecha).
    - Validación client-side del formulario con jQuery Validate.   
    - Si el usuario está ya conectado e intenta acceder a esta página se le redirecciona a la gestión de su cuenta. Si quiere registrar otra cuenta que haga logout manualmente.
    - hola@gmail.com = hola+ext@gmail.com (Se tienen en cuenta las extensiones de los correos para evitar que se usen para crear varias cuentas al mismo correo).

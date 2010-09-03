@@ -71,7 +71,7 @@
 	<?php 
 	if (isset($paginaJs))	
 	{ 	
-	   incluirJavascript($paginaJs);
+	   incluirJavascript($paginaJs,$mostrar_captcha);
 	} 
 	?>  	  	
    

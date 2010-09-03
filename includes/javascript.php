@@ -45,14 +45,16 @@ if ($pagina=="register.php")
                   {
                      equalTo: "#Password"
                   },
+                  <?php if ($mostrar_captcha) { ?>
+                  recaptcha_response_field: 
+                  {
+                     required: true
+                  },
+                  <?php } ?>
                   Email: 
                   {
                      required: true,
                      email: true
-                  },
-                  recaptcha_response_field: 
-                  {
-                     required: true
                   }
                },
       
@@ -75,14 +77,16 @@ if ($pagina=="register.php")
                   {
                      equalTo: "No ha tecleado la misma clave"
                   },
+                  <?php if ($mostrar_captcha) { ?>
+                  recaptcha_response_field: 
+                  {
+                     required: "Debe informar el código de seguridad"
+                  },
+                  <?php } ?>
                   Email: 
                   {
                      required: "Debe informar el email",
                      email: "Debe introducir un email válido"
-                  },
-                  recaptcha_response_field: 
-                  {
-                     required: "Debe informar el código de seguridad"
                   }
                }
             }
@@ -93,12 +97,13 @@ if ($pagina=="register.php")
       
    );
 
-   
+   <?php if ($mostrar_captcha) { ?>
    var RecaptchaOptions = {
       theme: 'custom',
       lang: 'es',
       custom_theme_widget: 'recaptcha_widget'
    };
+   <?php } ?>
    
    </script>
 

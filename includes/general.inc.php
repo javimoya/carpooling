@@ -17,12 +17,38 @@ $globals['host'] = $_SERVER['HTTP_HOST']; // compartir-coche.org
 $globals['path'] = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 
 
-function get_header( $paginaJs = null ) 
+function get_global_ip()
+{   
+    // PENDIENTE probar con web proxys... a ver que sale. Y desde fiddler... a ver si se puede cambiar la ip en las cabeceras
+    global $globals;
+    if ( isset($_SERVER["HTTP_CLIENT_IP"]) && $_SERVER["HTTP_CLIENT_IP"] && strcasecmp($_SERVER["HTTP_CLIENT_IP"], "unknown") )
+    {
+        $globals['real_ip'] = $_SERVER["HTTP_CLIENT_IP"];
+    }
+    else if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && $_SERVER["HTTP_X_FORWARDED_FOR"] && strcasecmp($_SERVER["HTTP_X_FORWARDED_FOR"], "unknown") )
+    {
+        $globals['real_ip'] = $_SERVER["HTTP_X_FORWARDED_FOR"];
+    }
+    else if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown"))
+    {
+        $globals['real_ip'] = getenv("REMOTE_ADDR");
+    }
+    else if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown"))
+    {
+        $globals['real_ip'] = $_SERVER['REMOTE_ADDR'];
+    }
+    else
+    {
+      $globals['real_ip'] = "";
+    }
+}
+
+function get_header( $paginaJs = null , $mostrar_captcha = false) 
 {
    include("header.php");
 }
 
-function incluirJavascript( $pagina ) 
+function incluirJavascript( $pagina, $mostrar_captcha ) 
 {
    include("javascript.php");
 }
