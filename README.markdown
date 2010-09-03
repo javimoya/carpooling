@@ -43,7 +43,7 @@ Carpooling
    
 ## 3. Pendiente
 
-- Realizar un script cron que se encargue de borrar usuarios registrados que no hayan activado su cuenta en 7 días.
+- Realizar un script cron que se encargue de borrar usuarios registrados que no hayan activado su cuenta en 7 días. (ya realizado de otra forma)
 - Crear un .htaccess (y no olvidar el control 404 -> ErrorDocument 404 /404.htm)
 - register.php: el captcha sólo habría que mostrarlo si la IP ha tenido registros previos, o intentos fallidos.
 - thankyou.php: mirar el registro en xing.com. Tiene cosas interesante -> te deja cambiar el correo (por si te has equivocado) -podemos pasarlo por session- ; te muestra un enlace a Gmail. 
@@ -62,6 +62,7 @@ Carpooling
    - algo muy molesto suele ocurrir tras registrarte en una página: el navegador te pregunta si deseas guardar la contraseña... Eso tiene sentido en la página de login... pero no en la de registro. Aquí lo solucionamos desactivando el autocompletado... Desventaja: Si un registro produce algún fallo los campos se quedan vacíos. Solución : Rellenamos los campos introducidos nosotros para que nos lo tenga que volver a teclear el usuario.
    - las validaciones realizadas en el server-side -> los posibles errores se muestran en la misma página... y no en otra.
    - tooltips donde se explica al usuario porque se le pide un email, y donde se le explica el porqué del captcha.
+   - justo antes de registrar usuarios borra usuarios inactivos antiguos, para no ocupar muchos nombres de usuarios/mails. (se podría hacer en un cron)
    
 - thankyou.php
 

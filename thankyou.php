@@ -67,7 +67,7 @@
                      </div>                  
                      <?php } ?>
 
-                  <p>Para activar tu cuenta en <?php echo $globals['nombrewebsite']; ?> haz clic sobre el enlace que aparece en ese mensaje.</p>
+                  <p>Para activar tu cuenta en <?php echo $globals['nombrewebsite']; ?> haz clic sobre el enlace que aparece en ese mensaje. Deberás hacerlo en las próximas 24 horas o se anulará automáticamente.</p>
                   <p><strong>Atención:</strong> Si no recibes el email de activación en unos minutos búscalo en la carpeta de spam.</p>
                   
                   <?php if ($_SESSION['email_registro_contador'] > 0) { ?> 

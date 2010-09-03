@@ -24,32 +24,44 @@ function filter($data) {
 }
 
 
+function borrar_usuarios_inactivos_antiguos()
+{
+   global $dbc;
+   // miro si se han borrado usuarios inactivos en las últimas 24 horas
+   $borrados_inactivos = log_get("users_inactives_deleted", 0, 0, 24*60*60);
+   if ($borrados_inactivos==0)
+   {      
+      // si no se ha realizado borrado en las últimas 24 horas lo hago ahora
+      $sql_delete = "DELETE from `users` WHERE `approved` = 0 AND `date` < now() - INTERVAL 1 DAY";
+               
+      mysql_query($sql_delete,$dbc['link']) or die("Deletion Failed:" . mysql_error());         
+      log_insert("users_inactives_deleted", 0, 0) ;
+   }         
+}
 
-function log_get($tipo, $user_id=0, $seconds=0) 
+function log_get($tipo, $ref_id, $user_id=0, $seconds=0) 
 {
    global $dbc, $globals;
-
-   $ip = $globals['real_ip'];
    
    if ($seconds > 0) 
-   {
+   {      
       $interval = "and log_date > date_sub(now(), interval $seconds second)";
    } else $interval = '';
-   $rs_duplicate = mysql_query("select count(*) from logs where log_type='$tipo' $interval and log_user_id = $user_id order by log_date desc limit 1") or die(mysql_error());
+   $rs_duplicate = mysql_query("select count(*) from logs where log_type='$tipo' and log_ref_id  = $ref_id $interval and log_user_id = $user_id order by log_date desc limit 1") or die(mysql_error());
    list($total) = mysql_fetch_row($rs_duplicate);
    return $total;
 }
 
-function log_insert($tipo, $user_id=0) 
+
+function log_insert($tipo, $ref_id, $user_id=0) 
 {
    global $dbc, $globals;
-
-   $ip = $globals['real_ip'];
+   
    
    $sql_insert = "INSERT into `logs`
-               (`log_date`,`log_type`,`log_ip`,`log_user_id`)
+               (`log_type`,`log_ref_id`,`log_user_id`, `log_ip`)
                 VALUES
-                (now(), '$tipo', '$ip', $user_id)
+                ('$tipo', $ref_id, $user_id, '$globals[ip]')
                ";
                
    mysql_query($sql_insert,$dbc['link']) or die("Insertion Failed:" . mysql_error());   

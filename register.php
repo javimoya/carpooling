@@ -2,16 +2,17 @@
 
    include("includes/general.inc.php");
    include("includes/dbc.inc.php");   
-   
+      
    page_protect(false, true);
    
    get_global_ip();
    
    function debo_mostrar_captcha()
    {
+      global $globals;
       // Sólo mostramos el captcha si se ha registrado con éxito ya esta ip en las últimas 24 horas
       // o si se han fallado 3 veces durante el registro en las últimas 24 horas
-      return ((log_get("register_ok", 0, 24*60*60)>0) || (log_get("register_fail", 0, 24*60*60)>=4));
+      return ((log_get("register_ok",ip2long($globals['ip']), 0, 24*60*60)>0) || (log_get("register_fail",ip2long($globals['ip']), 0, 24*60*60)>=3));
    }
    
    $mostrar_captcha = debo_mostrar_captcha();   
@@ -118,8 +119,10 @@
    function do_register() {
       
       global $hasError, $data, $dbc, $globals, $mostrar_captcha;
+      
+      borrar_usuarios_inactivos_antiguos();      
 
-      if ($mostrar_captcha) { 
+      if (($mostrar_captcha) && (isset($_POST["recaptcha_challenge_field"])) && (isset($_POST["recaptcha_response_field"]))) { 
          // Valido el captcha      
          require_once('/includes/recaptchalib.php');
          $resp = recaptcha_check_answer ($globals['privatekey'],
@@ -142,7 +145,7 @@
       
       $usr_email = $data['Email'];
       $user_name = $data['UserName'];
-
+                                 
       // Valido si existe ya el usuario
       $rs_duplicate = mysql_query("select count(*) as total from users where user_name='$user_name'") or die(mysql_error());
       list($total) = mysql_fetch_row($rs_duplicate);
@@ -178,7 +181,7 @@
          $md5_id = md5($user_id);
          mysql_query("update users set md5_id='$md5_id' where id='$user_id'");
          
-         log_insert("register_ok");
+         log_insert("register_ok",ip2long($globals['ip']));
        
          $_SESSION['email_registro'] = $usr_email; 
          $_SESSION['email_registro_contador'] = 3; 
@@ -193,7 +196,7 @@
       }
       else
       {
-         log_insert("register_fail");   
+         log_insert("register_fail",ip2long($globals['ip']));   
                   
          $mostrar_captcha = debo_mostrar_captcha();         
       } 

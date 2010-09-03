@@ -19,15 +19,17 @@ CREATE TABLE `users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=55 ;
 
 CREATE TABLE `logs` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `log_date` datetime NOT NULL default '0000-00-00',
-  `log_type` varchar(200) collate latin1_general_ci NOT NULL default '',
-  `log_ip` varchar(50) collate latin1_general_ci NOT NULL default '',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `log_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `log_type` enum('register_ok','register_fail','users_inactives_deleted') NOT NULL,
+  `log_ref_id` int(11) UNSIGNED NOT NULL,
   `log_user_id` bigint(20) NOT NULL,
-  PRIMARY KEY  (`id`),
-  INDEX KEY `indice` (`log_ip`)
+  `log_ip` char(24) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `log_date` (`log_date`),
+  KEY `log_type` (`log_type`,`log_ref_id`),
+  KEY `log_type_2` (`log_type`,`log_date`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=55 ;
-
 
 DELETE from `users` WHERE `user_name` = "javimoya";
 DELETE from `logs` WHERE 1 = 1;

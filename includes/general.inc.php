@@ -16,6 +16,8 @@ $globals['privatekey'] = "6LdYproSAAAAANf8S1zVDOGVVPd0AlEJ4FUbfdy0";
 $globals['host'] = $_SERVER['HTTP_HOST']; // compartir-coche.org
 $globals['path'] = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 
+get_global_ip();
+
 
 function get_global_ip()
 {   
@@ -23,23 +25,23 @@ function get_global_ip()
     global $globals;
     if ( isset($_SERVER["HTTP_CLIENT_IP"]) && $_SERVER["HTTP_CLIENT_IP"] && strcasecmp($_SERVER["HTTP_CLIENT_IP"], "unknown") )
     {
-        $globals['real_ip'] = $_SERVER["HTTP_CLIENT_IP"];
+        $globals['ip'] = $_SERVER["HTTP_CLIENT_IP"];
     }
     else if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && $_SERVER["HTTP_X_FORWARDED_FOR"] && strcasecmp($_SERVER["HTTP_X_FORWARDED_FOR"], "unknown") )
     {
-        $globals['real_ip'] = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        $globals['ip'] = $_SERVER["HTTP_X_FORWARDED_FOR"];
     }
     else if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown"))
     {
-        $globals['real_ip'] = getenv("REMOTE_ADDR");
+        $globals['ip'] = getenv("REMOTE_ADDR");
     }
     else if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown"))
     {
-        $globals['real_ip'] = $_SERVER['REMOTE_ADDR'];
+        $globals['ip'] = $_SERVER['REMOTE_ADDR'];
     }
     else
     {
-      $globals['real_ip'] = "";
+      $globals['ip'] = "0.0.0.0";
     }
 }
 
