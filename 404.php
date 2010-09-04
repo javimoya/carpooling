@@ -5,6 +5,7 @@
 ?>
       
 <html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <head><title><?php echo $globals['nombrewebsite'] ?> - 404</title>
 <style type="text/css">
 
