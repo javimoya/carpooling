@@ -66,6 +66,12 @@ a[title]:after  {  content: " *"; font-size: 85%; vertical-align: text-top; colo
 .mensaje#mensaje_email {
    background-image: url('../images/mios/icn_mail_received2.png');
 }
+.mensaje#mensaje_registro {
+   background-image: url('../images/mios/new.png');
+}
+.mensaje#mensaje_registro_mal {
+   background-image: url('../images/mios/wrong.png');
+}
 
 /* no lo hago con jquery porque en IE da problemas de presentación */
 #oculto-inicialmente {

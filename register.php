@@ -120,7 +120,7 @@
       
       global $hasError, $data, $dbc, $globals, $mostrar_captcha;
       
-      borrar_usuarios_inactivos_antiguos();      
+      borrar_usuarios_no_activados_antiguos();      
 
       if (($mostrar_captcha) && (isset($_POST["recaptcha_challenge_field"])) && (isset($_POST["recaptcha_response_field"]))) { 
          // Valido el captcha      

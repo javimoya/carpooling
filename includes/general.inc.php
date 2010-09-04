@@ -122,6 +122,7 @@ function enviar_correo_registro($usr_email,$md5_id,$activ_code)
    
    $mail->From = 'auto-reply@' . $globals['host'];
    $mail->FromName = $globals['nombrewebsite'];
+   $mail->CharSet="utf-8";
 
    $mail->IsMail(); // telling the class to use native PHP mail()
          
@@ -133,7 +134,7 @@ Muchas gracias por registrarte en $globals[nombrewebsite].<br><br>
 Aún queda un último paso. Pulsa sobre el siguiente enlace (o copia y pégalo en tu navegador) para completar el registro y activar tu cuenta:<br>
 http://" . $globals['host'] . $globals['path'] . "/activate.php?user=$md5_id&activ_code=$activ_code<br><br>
 
-Si has recibido este mensaje por error, simplemente bórralo.<br><br>
+Si ha recibido este mensaje por error, símplemente ignórelo.<br><br>
 
 Atentamente,<br>
 El equipo de $globals[nombrewebsite]<br>

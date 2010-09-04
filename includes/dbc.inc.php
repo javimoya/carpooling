@@ -24,15 +24,15 @@ function filter($data) {
 }
 
 
-function borrar_usuarios_inactivos_antiguos()
+function borrar_usuarios_no_activados_antiguos()
 {
    global $dbc;
-   // miro si se han borrado usuarios inactivos en las últimas 24 horas
-   $borrados_inactivos = log_get("users_inactives_deleted", 0, 0, 24*60*60);
+   // miro si se han borrado usuarios inactivos en las últimas 72 horas
+   $borrados_inactivos = log_get("users_inactives_deleted", 0, 0, 72*60*60);
    if ($borrados_inactivos==0)
    {      
-      // si no se ha realizado borrado en las últimas 24 horas lo hago ahora
-      $sql_delete = "DELETE from `users` WHERE `approved` = 0 AND `date` < now() - INTERVAL 1 DAY";
+      // si no se ha realizado borrado en las últimas 72 horas lo hago ahora
+      $sql_delete = "DELETE from `users` WHERE `approved` = 0 AND `date` < now() - INTERVAL 3 DAY";
                
       mysql_query($sql_delete,$dbc['link']) or die("Deletion Failed:" . mysql_error());         
       log_insert("users_inactives_deleted", 0, 0) ;

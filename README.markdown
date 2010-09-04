@@ -16,6 +16,7 @@ Carpooling
 
 - register.php: página para registrar nuevos usuarios.
 - thankyou.php: página de destino tras registrar un nuevo usuario.
+- activate.php: página para activar la cuenta con  el código enviado al email del usuario.
 - 404.php: página de error 404 (página no encontrada).
 
 - .htaccess: configuración apache
@@ -31,6 +32,7 @@ Carpooling
    
 - css: carpeta con ficheros de hojas de estilo.
    - mio.css: hoja de estilo propia.
+   
 - images/mios: carpeta con mis propias imágenes (no de la plantilla).
    - exclamation.png: icono usado en cajas con errores de validaciones de formularios.
    - success.png: icono para mostrar cajas de mensajes de éxito.
@@ -38,6 +40,9 @@ Carpooling
    - separador.gif: separador vertical del contenido.
    - icn_mail_received2.png: imagen de correo enviado.
    - 404b.png: imagen de página no encontrada.   
+   - new.png: imagen para cuando se activa un nuevo usuario.
+   - wrong.png: imagen para cuando la activación de usuario falla.
+   
 - sql: carpeta con consultas sqls usadas para la web. NO PUBLICAR.
    - dbsql.sql: sql con la creación de la tabla de usuarios.
    
@@ -47,6 +52,7 @@ Carpooling
 - Crear un .htaccess (y no olvidar el control 404 -> ErrorDocument 404 /404.htm)
 - register.php: el captcha sólo habría que mostrarlo si la IP ha tenido registros previos, o intentos fallidos.
 - thankyou.php: mirar el registro en xing.com. Tiene cosas interesante -> te deja cambiar el correo (por si te has equivocado) -podemos pasarlo por session- ; te muestra un enlace a Gmail. 
+- activate.php: ¿enviamos un correo al usuario?
 
 
 ## 4. Puntos Claves
@@ -62,7 +68,7 @@ Carpooling
    - algo muy molesto suele ocurrir tras registrarte en una página: el navegador te pregunta si deseas guardar la contraseña... Eso tiene sentido en la página de login... pero no en la de registro. Aquí lo solucionamos desactivando el autocompletado... Desventaja: Si un registro produce algún fallo los campos se quedan vacíos. Solución : Rellenamos los campos introducidos nosotros para que nos lo tenga que volver a teclear el usuario.
    - las validaciones realizadas en el server-side -> los posibles errores se muestran en la misma página... y no en otra.
    - tooltips donde se explica al usuario porque se le pide un email, y donde se le explica el porqué del captcha.
-   - justo antes de registrar usuarios borra usuarios inactivos antiguos, para no ocupar muchos nombres de usuarios/mails. (se podría hacer en un cron)
+   - justo antes de registrar usuarios borra usuarios inactivos antiguos, para no ocupar muchos nombres de usuarios/mails. (se podría hacer en un cron). Se hace aquí para conseguir que haya nombres de usuarios y emails libres.
    
 - thankyou.php
 
@@ -71,6 +77,11 @@ Carpooling
    - Sólo te permite 3 cambios para evitar abusos.
    - Al cambiar el email se controla que no sea el mismo correo (en cuenta extensiones), que la cuenta ya no esté activada, que siga existiendo, que no esté baneado, etc...
 
+- activate.php
+   
+   - Se activa la cuenta solo si el usuario no está aún activado, y el codigo de seguridad y activación son correctos.   
+   - Este es el segundo punto donde es borra usuarios inactivos antiguos, para no ocupar muchos nombres de usuarios/mails. (se podría hacer en un cron). Aquí tambien se hace para prevenir que no se active un usuario no activado expirado.
+   
 ## 5. Running
 
 To execute run the game, use
@@ -90,3 +101,10 @@ again, use:
 ## 6. License
 
 JVGS is released under the [WTFPL](http://sam.zoy.org/wtfpl/).
+
+
+ventajas del sistema:
+otros sistemas tienes que introducir el origen/destino en modo texto.. o sólo puedes elegir ciudades desde una combo box.
+
+desventajas del carpooling por internet:
+no conoces a la gente
