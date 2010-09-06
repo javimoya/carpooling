@@ -18,6 +18,7 @@ Carpooling
 - thankyou.php: página de destino tras registrar un nuevo usuario.
 - activate.php: página para activar la cuenta con  el código enviado al email del usuario.
 - login.php: página para conectarse al sistema.
+- logout.php: página para desconectarse del sistema.
 - 404.php: página de error 404 (página no encontrada).
 
 - .htaccess: configuración apache

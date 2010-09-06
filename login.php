@@ -3,7 +3,7 @@
    include("includes/general.inc.php");
    include("includes/dbc.inc.php");   
       
-   page_protect(false, false);
+   page_protect(false, true);
 
    // urlencode($_SERVER['REQUEST_URI'])      
    if(!empty($_REQUEST['continue']))

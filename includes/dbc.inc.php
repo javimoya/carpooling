@@ -165,7 +165,6 @@ function page_protect($ir_a_login = true, $ir_a_myaccount_si_conectado = false)
    }
 }
 
-
 function logout($ir_a_login=true)
 {
    global $db;
