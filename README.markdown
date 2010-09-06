@@ -19,6 +19,7 @@ Carpooling
 - activate.php: página para activar la cuenta con  el código enviado al email del usuario.
 - login.php: página para conectarse al sistema.
 - logout.php: página para desconectarse del sistema.
+- recover.php: página para recuperar contraseña.
 - 404.php: página de error 404 (página no encontrada).
 
 - .htaccess: configuración apache
@@ -31,6 +32,10 @@ Carpooling
    - javascript.php: contiene la parte javascript de cada página.   
    - recaptchalib.php: funciones proporcionadas por recaptcha para poder usarlo.
    - class.phpmailer-lite.php: clase para enviar correos. No uso directamente el mail de php por seguridad.
+
+- js: scripts
+
+   - customInput.jQuery.js: Checkboxes estilizados.
    
 - css: carpeta con ficheros de hojas de estilo.
    - mio.css: hoja de estilo propia.
@@ -44,7 +49,7 @@ Carpooling
    - 404b.png: imagen de página no encontrada.   
    - new.png: imagen para cuando se activa un nuevo usuario.
    - wrong.png: imagen para cuando la activación de usuario falla.
-   - checkbox.gif: imagen de checboxes estilizada.
+   - checkbox.gif: imagen de checkboxes estilizada.
    
 - sql: carpeta con consultas sqls usadas para la web. NO PUBLICAR.
    - dbsql.sql: sql con la creación de la tabla de usuarios.
@@ -73,6 +78,7 @@ Carpooling
    - las validaciones realizadas en el server-side -> los posibles errores se muestran en la misma página... y no en otra.
    - tooltips donde se explica al usuario porque se le pide un email, y donde se le explica el porqué del captcha.
    - justo antes de registrar usuarios borra usuarios inactivos antiguos, para no ocupar muchos nombres de usuarios/mails. (se podría hacer en un cron). Se hace aquí para conseguir que haya nombres de usuarios y emails libres.
+   - permitimos registro/login por usuario o email.
    
 - thankyou.php
 
@@ -93,8 +99,13 @@ Carpooling
    - Si el usuario está ya conectado e intenta acceder a esta página se le redirecciona a la gestión de su cuenta.
    - hola@gmail.com = hola+ext@gmail.com (Se tienen en cuenta las extensiones de los correos para evitar que se usen para crear varias cuentas al mismo correo).   
    - las validaciones realizadas en el server-side -> los posibles errores se muestran en la misma página... y no en otra.
-   - radio buttons estilizados.   
+   - checkboxes estilizados.   
    - tras el login se debe redireccionar a la página que estaba viendo antes del login.
+   
+- recover.php
+
+   - No enviamos la password existente (creamos una nueva)... Porque un intruso entonces podría obtener su password habitual.   
+   - siempre se muestra el captcha.
       
 ## 5. Running
 

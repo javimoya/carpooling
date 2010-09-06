@@ -100,6 +100,60 @@ if ($pagina=="register.php")
 <?php
 
 }
+else if ($pagina=="recover.php")
+{
+
+?> 
+
+   <script src="js/jquery.validate.min.js" type="text/javascript"></script>
+
+   <script type="text/javascript">
+
+   $(document).ready(
+      function()
+      {
+         $("#Email").focus();
+                  
+         $("#CommentForm").validate
+         (
+            {      
+               rules: 
+               {
+                  recaptcha_response_field: 
+                  {
+                     required: true
+                  },
+                  Email: 
+                  {
+                     required: true,
+                     email: true
+                  }
+               },
+      
+               messages:
+               {
+                  recaptcha_response_field: 
+                  {
+                     required: "Debe informar el código de seguridad"
+                  },
+                  Email: 
+                  {
+                     required: "Debe informar el email",
+                     email: "Debe introducir un email válido"
+                  }
+               }
+            }
+         );         
+         
+      } 
+      
+      
+   );
+        
+   
+<?php
+
+}
 else if ($pagina=="login.php")
 {
 

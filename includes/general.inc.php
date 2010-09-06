@@ -63,12 +63,15 @@ function validar_captcha(&$hasError)
       if (!$resp->is_valid) 
       {
          $hasError[] = "El código de seguridad no es correcto.";
+         return false;
       }     
    }
    else
    {
       $hasError[] = "El código de seguridad no es correcto.";
+      return false;
    }
+   return true;
 }
 
 function escribir_captcha()
@@ -221,4 +224,54 @@ ESTE ES UN MENSAJE GENERADO AUTOMÁTICAMENTE<br>
    }
    
 }
-?>			
+
+function enviar_correo_recover($usr_email,$new_pwd)
+{
+   global $globals;
+                  
+   require_once('class.phpmailer-lite.php');   
+   
+
+   $mail = new PHPMailerLite(); 
+   
+   $mail->From = 'auto-reply@' . $globals['host'];
+   $mail->FromName = $globals['nombrewebsite'];
+   $mail->CharSet="utf-8";
+
+   $mail->IsMail(); // telling the class to use native PHP mail()
+         
+   $message = 
+"¡Hola!<br><br>
+
+Has pedido recuperar tu contraseña. Apunta tu nueva clave y úsala a partir de ahora para ingresar en la web:<br><br>
+
+$new_pwd<br><br>
+
+Por seguridad es recomendable que una vez conectado la cambies manualmente desde tu perfil. PENDIENTE: poner enlace.<br><br>
+
+Atentamente,<br>
+El equipo de $globals[nombrewebsite]<br>
+______________________________________________________<br>
+ESTE ES UN MENSAJE GENERADO AUTOMÁTICAMENTE<br>
+****NO RESPONDA A ESTE CORREO****<br>
+";
+   
+   try {
+     
+     $mail->AddReplyTo('auto-reply@' . $globals['host'], $globals['nombrewebsite']);
+     $mail->AddAddress($usr_email);
+     $mail->Subject = 'Recuperación de la contraseña';    
+     $mail->MsgHTML($message);
+     $mail->isHtml(false);
+     $mail->Send();
+     return true;
+   } catch (phpmailerException $e) {
+      return false;
+   } catch (Exception $e) {
+      return false;
+   }
+   
+}
+?>		
+
+

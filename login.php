@@ -48,6 +48,9 @@
    
    escribir_titulo("Login", "Conéctate con tu usuario");
 
+   escribir_caja_resultado($_SESSION['hasSuccessRecover'],"success");
+   escribir_caja_resultado($_SESSION['hasInfoRecover'],"information");
+   
    // Mostramos una caja con los errores encontrados tras hacer submit 
    escribir_resultado_validaciones($hasError);
    
@@ -75,7 +78,7 @@
                         escribir_captcha();
                      } ?>                                                                  
                      <div>
-                        <input id="RememberMe" name="RememberMe" type="checkbox" checked /><label for="RememberMe">Recuérdame en este ordenador</label>
+                        <input id="RememberMe" name="RememberMe" type="checkbox" /><label for="RememberMe">Recuérdame en este ordenador</label>
                      </div>
                      <div>
                         <input type="hidden" name="continue" value="<?php echo htmlspecialchars($_REQUEST['continue']); ?>" />                        
@@ -114,8 +117,8 @@
       
       if ($mostrar_captcha) 
       { 
-         validar_captcha($hasError);
-         return; // si no introduce correctamente el código de seguridad no debemos mirar nada más... porque podría sacar por fuerza bruta usuario/clave.
+         if (!validar_captcha($hasError))
+            return; // si no introduce correctamente el código de seguridad no debemos mirar nada más... porque podría sacar por fuerza bruta usuario/clave.
       }
       
       $user_email = $data['UserNameEmail'];
@@ -130,23 +133,29 @@
          $parts = explode('@', $user_email);      
          $subparts = explode('+', $parts[0]); // se permiten direcciones del tipo user+extension@gmail.com, que debemos controlar para no permitir abusos
 
-         $user_cond = "user_email='$subparts[0]@$parts[1]' or user_email LIKE '$subparts[0]+%@$parts[1]'";    
+         $user_cond = "(user_email='$subparts[0]@$parts[1]' or user_email LIKE '$subparts[0]+%@$parts[1]')";    
       }
 
    
-      $result = mysql_query("SELECT `id`,`pwd`,`user_name`,`approved`,`user_level` FROM users WHERE $user_cond AND `banned` = '0' limit 1") or die (mysql_error()); 
+      $result = mysql_query("SELECT `id`,`pwd`,`user_name`,`approved`,`banned`,`user_level` FROM users WHERE $user_cond limit 1") or die (mysql_error()); 
       $num = mysql_num_rows($result);
 
       
       if ( $num > 0 ) 
       {    
-         list($id,$pwd,$user_name,$approved,$user_level) = mysql_fetch_row($result);
+         list($id,$pwd,$user_name,$approved,$banned,$user_level) = mysql_fetch_row($result);
+
+         if($banned) 
+         {         
+            $hasError[] = "Cuenta anulada.";
+            return;
+         }         
    
          if(!$approved) 
          {         
             $hasError[] = "Cuenta registrada pero aún no activada. Revisa tu buzón de correo y sigue el enlace que allí aparece.";
             return;
-         }
+         }         
              
          if ($pwd === PwdHash($pass,substr($pwd,0,9))) 
          { 
