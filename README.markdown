@@ -17,6 +17,7 @@ Carpooling
 - register.php: página para registrar nuevos usuarios.
 - thankyou.php: página de destino tras registrar un nuevo usuario.
 - activate.php: página para activar la cuenta con  el código enviado al email del usuario.
+- login.php: página para conectarse al sistema.
 - 404.php: página de error 404 (página no encontrada).
 
 - .htaccess: configuración apache
@@ -42,6 +43,7 @@ Carpooling
    - 404b.png: imagen de página no encontrada.   
    - new.png: imagen para cuando se activa un nuevo usuario.
    - wrong.png: imagen para cuando la activación de usuario falla.
+   - checkbox.gif: imagen de checboxes estilizada.
    
 - sql: carpeta con consultas sqls usadas para la web. NO PUBLICAR.
    - dbsql.sql: sql con la creación de la tabla de usuarios.
@@ -62,6 +64,7 @@ Carpooling
    - El proceso de registro debe ser fácil y rápido para no desanimar al potencial usuario. Mientras menos campos se le pidan mejor.
       - En el formulario de registro no se le pide repetir el email como suele ser habitual para evitar errores. -> Tras enviarle el correo para confirmar el registro se le permite cambiarlo si se ha equivocado mientras aún no haya realizado la activación.
       - El captcha es necesario por motivos de seguridad (evitar registros automáticos), pero es muy molesto para el usuario. Sólo se muestra en ips que tengan ya X registros anteriores -fallidos y exitosos- (o por fecha).
+   - No guardamos su clave en ningún lugar.
    - Validación client-side del formulario con jQuery Validate.   
    - Si el usuario está ya conectado e intenta acceder a esta página se le redirecciona a la gestión de su cuenta. Si quiere registrar otra cuenta que haga logout manualmente.
    - hola@gmail.com = hola+ext@gmail.com (Se tienen en cuenta las extensiones de los correos para evitar que se usen para crear varias cuentas al mismo correo).
@@ -81,7 +84,17 @@ Carpooling
    
    - Se activa la cuenta solo si el usuario no está aún activado, y el codigo de seguridad y activación son correctos.   
    - Este es el segundo punto donde es borra usuarios inactivos antiguos, para no ocupar muchos nombres de usuarios/mails. (se podría hacer en un cron). Aquí tambien se hace para prevenir que no se active un usuario no activado expirado.
+
+- login.php
    
+   - El proceso de login debe ser fácil y rápido para no desanimar al usuario.      
+      - El captcha es necesario por motivos de seguridad (fuerza bruta), pero es muy molesto para el usuario. Sólo se muestra en ips que tengan ya X logins fallados.
+   - Si el usuario está ya conectado e intenta acceder a esta página se le redirecciona a la gestión de su cuenta.
+   - hola@gmail.com = hola+ext@gmail.com (Se tienen en cuenta las extensiones de los correos para evitar que se usen para crear varias cuentas al mismo correo).   
+   - las validaciones realizadas en el server-side -> los posibles errores se muestran en la misma página... y no en otra.
+   - radio buttons estilizados.   
+   - tras el login se debe redireccionar a la página que estaba viendo antes del login.
+      
 ## 5. Running
 
 To execute run the game, use

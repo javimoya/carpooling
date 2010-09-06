@@ -96,17 +96,79 @@ if ($pagina=="register.php")
       
       
    );
-
-   <?php if ($mostrar_captcha) { ?>
-   var RecaptchaOptions = {
-      theme: 'custom',
-      lang: 'es',
-      custom_theme_widget: 'recaptcha_widget'
-   };
-   <?php } ?>
    
-   </script>
+<?php
 
+}
+else if ($pagina=="login.php")
+{
+
+?>   
+   
+   <script src="js/jquery.validate.min.js" type="text/javascript"></script>
+   <script src="js/customInput.jquery.js" type="text/javascript"></script>
+
+   <script type="text/javascript">
+
+   $(document).ready(
+      function()
+      {         
+         $("#UserNameEmail").focus();
+         
+         $('input').customInput();
+                  
+         $("#CommentForm").validate
+         (
+            {      
+               rules: 
+               {
+                  UserNameEmail: 
+                  {
+                     required: true
+                  },
+                  RememberMe: 
+                  {
+                     required: true
+                  },
+                  <?php if ($mostrar_captcha) { ?>
+                  recaptcha_response_field: 
+                  {
+                     required: true
+                  },
+                  <?php } ?>                  
+                  Password: 
+                  {
+                     required: true
+                  }
+               },
+      
+               messages:
+               {
+                  UserNameEmail: 
+                  {
+                     required: "Debe informar el nombre de usuario o correo electrónico"
+                  },
+                  Password: 
+                  {
+                     required: "Debe informar la clave"
+                  }
+                  <?php if ($mostrar_captcha) { ?>
+                  ,
+                  recaptcha_response_field: 
+                  {
+                     required: "Debe informar el código de seguridad"
+                  }
+                  <?php } ?>
+               }
+            }
+         );         
+         
+      } 
+      
+      
+   );
+   
+   
 <?php
 
 }
@@ -176,12 +238,20 @@ else if ($pagina=="thankyou.php")
          ); 
 
       }      
-   );   
-   
-   </script>
+   );      
 
 <?php
 
 }
 
-?>
+if ($mostrar_captcha) { ?>
+   
+   var RecaptchaOptions = {
+      theme: 'custom',
+      lang: 'es',
+      custom_theme_widget: 'recaptcha_widget'
+   };
+   
+<?php } ?>
+   
+</script>

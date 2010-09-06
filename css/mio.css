@@ -77,3 +77,56 @@ a[title]:after  {  content: " *"; font-size: 85%; vertical-align: text-top; colo
 #oculto-inicialmente {
    display:none;
 }
+
+/* radio buttons estilizados */
+
+.custom-checkbox { position: relative; display: inline; margin-left:-5px;  }
+	
+.custom-checkbox input {
+	position: absolute;
+	left: 2px;
+	top: 3px;
+	margin: 0;
+	z-index: 0;	
+}
+
+.custom-checkbox label {
+	display: inline;
+	position: relative;	
+	z-index: 1;
+	padding-right: 1em;
+	line-height: 1;
+	padding: .5em 0 .5em 27px;
+	margin: 0 0 .3em;
+	cursor: pointer;
+}
+
+.custom-checkbox label {
+	background: url(../images/mios/checkbox.gif) no-repeat; 
+}
+
+.custom-checkbox label, .custom-radio label {
+	background-position: -10px -12px;
+}
+.custom-checkbox label.focus {
+	background-position: -10px -113px;
+}
+
+.custom-checkbox label.focus.checked {
+	background-position: -10px -313px;
+}
+
+.custom-checkbox label.checked {
+	background-position: -10px -213px;
+}
+
+.custom-checkbox label.checkedHover, 
+.custom-checkbox label.checkedFocus {
+	background-position: -10px -313px;
+}
+
+/* En Firefox aparece un borde feo en los botones cuando tienen el foco */
+.btn::-moz-focus-inner { border-color:transparent;}
+
+/* Para que sean accesibles cambio la decoración -para que se sepa que tiene el foco- */
+.btn:focus span { text-decoration: underline  };

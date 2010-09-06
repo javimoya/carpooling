@@ -221,6 +221,31 @@ function isUserID($username)
    {
       return false;
    }
- } 
+} 
+
+function GenKey($length = 7)
+{
+  $password = "";
+  $possible = "0123456789abcdefghijkmnopqrstuvwxyz"; 
+  
+  $i = 0; 
+    
+  while ($i < $length) { 
+
+    
+    $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+       
+    
+    if (!strstr($password, $char)) { 
+      $password .= $char;
+      $i++;
+    }
+
+  }
+
+  return $password;
+
+}
+
  
 ?>

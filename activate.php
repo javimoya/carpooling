@@ -30,6 +30,9 @@
          $rs_activ = mysql_query("update users set approved='1' WHERE
                                     md5_id='$user' AND activation_code = '$activ' and approved=0 ") or die(mysql_error());
          $exito = true;
+         
+         $_SESSION["email_registro"]=null;
+
       }
    }
    else
